@@ -77,7 +77,7 @@ export default function InputSingleFile({ size, error, form, allowedFileTypes, m
 
 
   return (
-    <div className="w-lg">
+    <div>
         { !formField || !validateFile() ? (
             <>
                 <div className="w-full relative group cursor-pointer">
