@@ -78,7 +78,7 @@ export class PhotosService {
 		}
 
 		const photos = await this.getAllPhotos();
-
+		// Verificar se não está no final ou início da lista
 		const nextPhoto =
 			photos.findIndex((p) => p.id === photo.id) + 1 < photos.length
 				? photos[photos.findIndex((p) => p.id === photo.id) + 1].id
