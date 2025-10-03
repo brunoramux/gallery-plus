@@ -1,7 +1,7 @@
-import PhotoWidget from "../contexts/photos/components/photo-widget";
-import type { Photo } from "../contexts/photos/models/photo";
-import Skeleton from "./skeleton";
-import Text from "./text";
+import PhotoWidget from "./photo-widget";
+import type { Photo } from "../models/photo";
+import Skeleton from "../../../components/skeleton";
+import Text from "../../../components/text";
 
 interface PhotosListProps {
   photos: Photo[];
@@ -32,6 +32,12 @@ export default function PhotosList({ photos, loading }: PhotosListProps) {
               <PhotoWidget key={photo.id} photo={photo} />
             ))}
           </div>
+      )}
+
+      {!loading && photos.length === 0 && (
+        <Text variant="paragraph-medium" className="text-center text-accent-span">
+          Nenhuma foto encontrada
+        </Text>
       )}
 
       {loading && (
