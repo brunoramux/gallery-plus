@@ -62,7 +62,13 @@ export default function PagePhotoDetails() {
           </Text>
           <AlbumsListSelectable
             photo={photo as Photo}
-            albums={[]}
+            albums={[
+              { id: "3421", title: "Album 1" },
+              { id: "123", title: "Album 2" },
+              { id: "456", title: "Album 3" },
+              { id: "789", title: "Album 4" },
+              { id: "101112", title: "Album 5" },
+            ]}
           />
         </div>
       </div>

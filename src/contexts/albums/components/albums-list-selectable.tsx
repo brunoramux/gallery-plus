@@ -22,6 +22,22 @@ export default function AlbumsListSelectable({
     return photo?.albums?.some((album) => album.id === albumId);
   }
 
+  function handlePhotoOnAlbunms(albumId: string){
+    let albumsIds = []
+    // Se estiver marcado, devemos excluir o id do album do array de albums da foto
+    if(isChecked(albumId)){
+      // Se estiver marcado, desmarca usando o filter pegando todos os ids menos o que foi desmarcado. Retorna apenas os ids que não foram desmarcados
+      albumsIds = photo.albums.filter((album) => album.id !== albumId).map((album) => album.id)
+      photo.albums = [...photo.albums.filter((album) => album.id !== albumId)]
+    } else {
+      // Se estiver desmarcado, adiciona o id do album ao array de albums da foto
+      const newAlbum = albums.find((album) => album.id === albumId)
+      albumsIds = [...photo.albums.map((album) => album.id), albumId]
+      photo.albums = [...photo.albums, newAlbum!]
+    }
+    console.log(albumsIds)
+  }
+
   return (
     <ul className="flex flex-col gap-4">
       {!loading &&
@@ -35,6 +51,7 @@ export default function AlbumsListSelectable({
               </Text>
               <InputCheckbox
                 defaultChecked={isChecked(album.id)}
+                onClick={() => handlePhotoOnAlbunms(album.id)}
               />
             </div>
             {index !== albums.length - 1 && <Divider className="mt-4" />}
