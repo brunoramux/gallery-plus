@@ -13,7 +13,7 @@ import Text from "../../../components/text";
 import type { Photo } from "../../photos/models/photo";
 import SelectCheckboxIllustration from "../../../assets/images/select-checkbox.svg?react";
 import Skeleton from "../../../components/skeleton";
-import ImageFilePreview from "../../../components/image-file-preview";
+import PhotoImageSelectable from "../../photos/components/photo-image-selectable";
 
 
 interface AlbumNewDialogProps {
@@ -45,10 +45,14 @@ export default function AlbumNewDialog({ trigger }: AlbumNewDialogProps) {
     },
   ];
 
+  function handleTogglePhoto(selected: boolean, photoId: string) {
+    console.log({ selected, photoId });
+  }
+
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      
+
       <DialogContent>
         <DialogHeader>Criar álbum</DialogHeader>
 
@@ -63,11 +67,13 @@ export default function AlbumNewDialog({ trigger }: AlbumNewDialogProps) {
             {!isLoadingPhotos && photos.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {photos.map((photo) => (
-                  <ImageFilePreview
+                  // Todas as props que eu passaria para o PhotoImagePreview posso passar para o PhotoImageSelectable pois ele extende as props
+                  <PhotoImageSelectable
                     key={photo.id}
                     src={`/images/${photo.imageId}`}
                     title={photo.title}
                     className="w-20 h-20 rounded"
+                    onSelectImage={(selected) => handleTogglePhoto(selected, photo.id)}
                   />
                 ))}
               </div>
