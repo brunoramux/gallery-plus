@@ -18,7 +18,7 @@ export default function AlbumsFilter({
 }: AlbumsFilterProps) {
   return (
     <div
-      className={cx("flex items-center gap-3.5 overflow-x-auto", className)}
+      className={cx("flex items-center gap-3.5 overflo w-x-auto", className)}
       {...props}
     >
       <Text variant="heading-small">Álbuns</Text>

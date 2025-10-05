@@ -5,26 +5,24 @@ import ImageFilePreview from "../components/image-file-preview";
 import Skeleton from "../components/skeleton";
 import Text from "../components/text";
 import AlbumsListSelectable from "../contexts/albums/components/albums-list-selectable";
+import useAlbums from "../contexts/albums/hooks/use-albums";
 import PhotosNavigator from "../contexts/photos/components/photos-navigator";
 import type { Photo } from "../contexts/photos/models/photo";
 
 export default function PagePhotoDetails() {
-  const isLoadingPhoto = false;
+  const { albums, isLoadingAlbums } = useAlbums();
+
   const photo = {
     id: "123",
     title: "Olá mundo!",
     imageId: "portrait-tower.png",
-    albums: [
-      { id: "3421", title: "Album 1" },
-      { id: "123", title: "Album 2" },
-      { id: "456", title: "Album 3" },
-    ],
+    albums
   } as Photo;
 
   return (
     <Container>
       <header className="flex items-center justify-between gap-8 mb-8">
-        {!isLoadingPhoto ? (
+        {!isLoadingAlbums ? (
           <Text variant="heading-large">{photo.title}</Text>
         ) : (
           <Skeleton className="w-48 h-8" />
@@ -35,7 +33,7 @@ export default function PagePhotoDetails() {
 
       <div className="grid grid-cols-[21rem_1fr] gap-24">
         <div className="space-y-3">
-          {!isLoadingPhoto ? (
+          {!isLoadingAlbums ? (
             <ImageFilePreview
               src={`/images/${photo?.imageId}`}
               title={photo?.title}
@@ -45,7 +43,7 @@ export default function PagePhotoDetails() {
             <Skeleton className="h-[21rem]" />
           )}
 
-          {!isLoadingPhoto ? (
+          {!isLoadingAlbums ? (
             <Button
               variant="destructive"
             >
@@ -62,13 +60,7 @@ export default function PagePhotoDetails() {
           </Text>
           <AlbumsListSelectable
             photo={photo as Photo}
-            albums={[
-              { id: "3421", title: "Album 1" },
-              { id: "123", title: "Album 2" },
-              { id: "456", title: "Album 3" },
-              { id: "789", title: "Album 4" },
-              { id: "101112", title: "Album 5" },
-            ]}
+            albums={albums}
           />
         </div>
       </div>

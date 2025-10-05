@@ -34,7 +34,7 @@ export default function PhotosList({ photos, loading }: PhotosListProps) {
           </div>
       )}
 
-      {!loading && photos.length === 0 && (
+      {loading && photos.length === 0 && (
         <Text variant="paragraph-medium" className="text-center text-accent-span">
           Nenhuma foto encontrada
         </Text>
