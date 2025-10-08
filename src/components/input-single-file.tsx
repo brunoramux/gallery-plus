@@ -116,7 +116,7 @@ export default function InputSingleFile({ size, error, form, allowedFileTypes, m
                     {
                         error && (
                             <Text variant="label-small" className="text-accent-red">
-                                Erro
+                                { error }
                             </Text>
                         )
                     }
