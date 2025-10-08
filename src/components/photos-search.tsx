@@ -2,14 +2,16 @@ import InputText from "./input-text";
 import SearchIcon from "../assets/icons/search.svg?react"
 import React from "react";
 import { debounce } from "../helpers/utils";
+import usePhotos from "../contexts/photos/hooks/use-photos";
 
 export default function PhotosSearch() {
+    const { filter } = usePhotos()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const debouncedSearch = React.useCallback(
         debounce((value: string) => {
-            console.log("Valor com debounce", value)
-        }, 1000), 
-        []
+            filter.setQ(value)
+        }, 500), 
+        [filter.setQ]
     )
     
     const [inputValue, setInputValue] = React.useState('')
