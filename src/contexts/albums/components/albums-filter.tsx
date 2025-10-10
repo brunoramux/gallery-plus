@@ -31,7 +31,7 @@ export default function AlbumsFilter({
             <Button 
               size="sm" 
               variant={filter.albumId === null ? "primary" : "ghost"}
-              className="cursor-pointer" 
+              className="cursor-pointer wrap-normal" 
               onClick={() => filter.setAlbumId(null)}
             >
               Todos
@@ -40,7 +40,7 @@ export default function AlbumsFilter({
               <Button
                 key={album.id}
                 size="sm"
-                className="cursor-pointer"
+                className="cursor-pointe truncate"
                 variant={filter.albumId === album.id ? "primary" : "ghost"}
                 onClick={() => filter.setAlbumId(album.id)}
               >

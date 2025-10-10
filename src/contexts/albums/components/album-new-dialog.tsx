@@ -14,6 +14,11 @@ import SelectCheckboxIllustration from "../../../assets/images/select-checkbox.s
 import Skeleton from "../../../components/skeleton";
 import PhotoImageSelectable from "../../photos/components/photo-image-selectable";
 import usePhotos from "../../photos/hooks/use-photos";
+import { useForm } from "react-hook-form";
+import { albumNewFormSchema, type AlbumNewFormData } from "../schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import React, { useTransition } from "react";
+import useAlbum from "../hooks/use-album";
 
 
 interface AlbumNewDialogProps {
@@ -21,21 +26,51 @@ interface AlbumNewDialogProps {
 }
 
 export default function AlbumNewDialog({ trigger }: AlbumNewDialogProps) {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [ isCreatingAlbum, setIsCreatingAlbum ] = useTransition()
+
+  const form = useForm<AlbumNewFormData>({
+    resolver: zodResolver(albumNewFormSchema)
+  })
+
   const { photos, isLoading } = usePhotos()
+  const { createAlbum } = useAlbum()
 
   function handleTogglePhoto(selected: boolean, photoId: string) {
-    console.log({ selected, photoId });
+    if(selected) {
+      form.setValue("photosIds", [...form.getValues("photosIds") || [], photoId])
+    } else {
+      form.setValue("photosIds", form.getValues("photosIds")?.filter(id => id !== photoId))
+    }
   }
 
+  function handleSubmit(payload: AlbumNewFormData) {
+    setIsCreatingAlbum(async () => {
+      await createAlbum(payload)
+      setIsOpen(false)
+    })
+  }
+
+  React.useEffect(() => {
+      if (!isOpen) {
+          form.reset()
+      }
+  }, [isOpen, form])
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
 
       <DialogContent>
+        <form onSubmit={form.handleSubmit(handleSubmit)}>
         <DialogHeader>Criar álbum</DialogHeader>
 
         <DialogBody className="flex flex-col gap-5">
-          <InputText placeholder="Adicione um título" />
+          <InputText 
+            placeholder="Adicione um título" 
+            error={form.formState.errors.title?.message}
+            {...form.register("title")}
+          />
 
           <div className="space-y-3">
             <Text as="div" variant="label-small" className="mb-3">
@@ -52,6 +87,7 @@ export default function AlbumNewDialog({ trigger }: AlbumNewDialogProps) {
                     title={photo.title}
                     className="w-20 h-20 rounded"
                     onSelectImage={(selected) => handleTogglePhoto(selected, photo.id)}
+                    selected={form.getValues("photosIds")?.includes(photo.id)}
                   />
                 ))}
               </div>
@@ -83,8 +119,9 @@ export default function AlbumNewDialog({ trigger }: AlbumNewDialogProps) {
           <DialogClose asChild>
             <Button variant="secondary">Cancelar</Button>
           </DialogClose>
-          <Button>Criar</Button>
+          <Button type="submit">Criar</Button>
         </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );

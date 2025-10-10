@@ -16,6 +16,8 @@ export default function usePhoto(id?: string) {
         enabled: !!id,
     })
 
+    
+
     const queryClient = useQueryClient()
 
     async function createPhoto(payload: PhotoNewFormData){
@@ -49,11 +51,24 @@ export default function usePhoto(id?: string) {
         }
     }
 
+    async function deletePhoto(id: string) {
+        try {
+            await api.delete(`/photos/${id}`)
+            queryClient.invalidateQueries({ queryKey: ['photos'] })
+            toast.success('Foto deletada com sucesso!')
+            setTimeout(() => window.location.href = '/', 1000)
+        } catch (error) {
+            toast.error('Erro ao deletar a foto!')
+            throw error
+        }
+    }
+
     return { 
         photo: data, 
         nextPhotoId: data?.nextPhotoId,
         previousPhotoId: data?.previousPhotoId,
         isLoading,
-        createPhoto
+        createPhoto,
+        deletePhoto
     }
 }

@@ -10,11 +10,18 @@ import useAlbums from "../contexts/albums/hooks/use-albums";
 import PhotosNavigator from "../contexts/photos/components/photos-navigator";
 import type { Photo } from "../contexts/photos/models/photo";
 import usePhoto from "../contexts/photos/hooks/use-photo";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function PagePhotoDetails() {
   const { id } = useParams()
-  const { photo, nextPhotoId, previousPhotoId } = usePhoto(id);
+  const { photo, nextPhotoId, previousPhotoId, deletePhoto } = usePhoto(id);
   const { albums, isLoadingAlbums } = useAlbums();
+  const queryClient = useQueryClient()
+  
+  async function handleDeletePhoto(id: string) {
+    await deletePhoto(id);
+    queryClient.invalidateQueries({ queryKey: ['photos'] })
+  }
 
   return (
     <Container>
@@ -46,6 +53,7 @@ export default function PagePhotoDetails() {
           {!isLoadingAlbums ? (
             <Button
               variant="destructive"
+              onClick={() => handleDeletePhoto(photo!.id)}
             >
               Excluir foto
             </Button>
